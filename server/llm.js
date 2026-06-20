@@ -1,11 +1,18 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { randomUUID } from 'crypto';
+import fetch from 'node-fetch';
+import https from 'https';
+
+const httpsAgent = new https.Agent({ keepAlive: false });
 
 let client;
 
 function getClient() {
   if (!client) {
-    client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+    client = new Anthropic({
+      apiKey: process.env.ANTHROPIC_API_KEY,
+      fetch: (url, init) => fetch(url, { ...init, agent: httpsAgent }),
+    });
   }
   return client;
 }
