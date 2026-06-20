@@ -54,4 +54,28 @@ router.post('/', (req, res) => {
   });
 });
 
+router.get('/', (req, res) => {
+  const adminSecret = req.headers['x-admin-secret'];
+  if (adminSecret !== process.env.ADMIN_SECRET) {
+    return res.status(401).json({ error: 'Invalid admin secret' });
+  }
+
+  const db = getDb();
+  const rooms = db.prepare(`
+    SELECT r.id, r.name, r.admin_token, r.created_at,
+           p1.display_name as person_a_name, p1.token as person_a_token,
+           p2.display_name as person_b_name, p2.token as person_b_token,
+           COUNT(q.id) as question_count
+    FROM rooms r
+    JOIN persons p1 ON p1.room_id = r.id
+    JOIN persons p2 ON p2.room_id = r.id AND p2.id != p1.id
+    LEFT JOIN questions q ON q.room_id = r.id
+    WHERE p1.id < p2.id
+    GROUP BY r.id
+    ORDER BY r.created_at DESC
+  `).all();
+
+  res.json(rooms);
+});
+
 export default router;

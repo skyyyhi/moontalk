@@ -26,6 +26,9 @@ async function request(method, path, body, extraHeaders = {}) {
 export const api = {
   me: () => request('GET', '/me'),
 
+  listRooms: (adminSecret) =>
+    fetch(`${BASE}/rooms`, { headers: { 'x-admin-secret': adminSecret } }).then(r => r.json()),
+
   createRoom: (data, adminSecret) =>
     request('POST', '/rooms', data, { 'x-admin-secret': adminSecret }),
 
