@@ -1,0 +1,16 @@
+services:
+  app:
+    build: .
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - moontalk_data:/app/data
+    environment:
+      PORT: 3000
+      DATABASE_PATH: /app/data/db.sqlite
+      ADMIN_SECRET: ${ADMIN_SECRET}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+
+volumes:
+  moontalk_data:

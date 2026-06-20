@@ -1,0 +1,8 @@
+node_modules/
+client/node_modules/
+dist/
+data/
+.env
+*.db
+*.sqlite
+.playwright-mcp/
