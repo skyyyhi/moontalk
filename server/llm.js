@@ -1,16 +1,11 @@
 import Anthropic from '@anthropic-ai/sdk';
 import { randomUUID } from 'crypto';
-import { Agent, fetch as undiciFetch } from 'node:undici';
 
 let client;
 
 function getClient() {
   if (!client) {
-    const agent = new Agent({ allowH2: false });
-    client = new Anthropic({
-      apiKey: process.env.ANTHROPIC_API_KEY,
-      fetch: (url, init) => undiciFetch(url, { ...init, dispatcher: agent }),
-    });
+    client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
   }
   return client;
 }
