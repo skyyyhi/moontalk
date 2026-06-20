@@ -11,6 +11,7 @@ services:
       DATABASE_PATH: /app/data/db.sqlite
       ADMIN_SECRET: ${ADMIN_SECRET}
       ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY}
+      NODE_OPTIONS: --dns-result-order=ipv4first
 
 volumes:
   moontalk_data:
